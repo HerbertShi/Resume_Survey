@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>问卷制作</title>
+    <link rel="stylesheet" type="text/css" href="style/branch.css" />
+    <link rel="stylesheet" type="text/css" href="style/base.css" />
+    <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script>
+        function deleteSurvey(_id) {
+            if (confirm("确认删除？")) {
+                $.ajax({
+                    url: requestUrl.survey + "/" + _id,
+                    type: "DELETE",
+                    success: function(response, option) {
+                        if (response == 0) {
+                            alert("删除成功！");
+                            listSurvey();
+                        } else {
+                            alert("删除失败！");
+                        }
+                    }
+                });
+            }
+        }
+
+        function listSurvey() {
+            $.getJSON(requestUrl.survey, function(data) {
+                $("#surveyList tbody").empty();
+                $(data).each(function(index, element) {
+                    var $tr = $("<tr></tr>");
+                    if (index % 2 == 1) {
+                        $tr.addClass("color");
+                    }
+                    $tr.append("<td>" + element.question_name + "</td>");
+                    $tr.append("<td>" + element.createTime + "</td>");
+                    $tr.append("<td>" + element.updateTime + "</td>");
+                    $tr.append("<td>" + survey_status[element.survey_status] + "</td>");
+                    $tr.append("<td>" + examination_type[element.examination_type] + "</td>");
+                    $tr.append("<td><a onclick='deleteSurvey(" + element.ID + ")'>删除</a></td>");
+                    $tr.appendTo($("#surveyList tbody"));
+                });
+            });
+        }
+        $(function() {
+            listSurvey();
+        });
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="head">
+            <div class="logo">
+                <img src="img/logo_survey.png" /></div>
+            <div class="page_tab">
+                问卷管理</div>
+            <!-- page title -->
+            <div class="welcome">
+                欢迎您，Evan | <a href="#">退出</a>
+            </div>
+        </div>
+        <div class="main">
+            <div class="aside">
+                <ul>
+                    <li class="active"><a href="management.html">问卷管理</a></li>
+                    <li><a href="document.html">档案管理</a></li>
+                </ul>
+            </div>
+            <div class="container">
+                <!-- InstanceBeginEditable name="container" -->
+                    <div class="pag_head">
+
+                        <span>
+                            <!-- #EndLibraryItem -->                    
+                            <!-- #BeginLibraryItem "/Library/btn_new.lbi" -->                    
+                            <input type="button" value="新增" class="btn_blue">                    
+                            <!-- #EndLibraryItem --> </span>
+                    </div>
+                    <div class="pag_content">
+                        <table id="surveyList" class="tbl">
+                            <thead>
+                                <th>问卷名称</th>
+                                <th>创建时间</th>
+                                <th>修改时间</th>
+                                <th>状态</th>
+                                <th>问卷类型</th>
+                                <th>操作</th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                <!-- InstanceEndEditable -->
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <!-- footer start-->
+        <div class="foot">
+            我能调研 版权所有 沪ICP备10027199号 Copyright © 2010-2011 www.icansurvey.cc. All Riggnhts Reserved.
+        </div>
+    </div>
+    <!--                                 // <div>
+                        //     <label></label>
+                        //     <input type="button" class="btn_blue" value="下一步" />
+                        //     <input type="button" class="btn_blue" value="重置" />
+                        // </div> -->
+</body>
+<!-- InstanceEnd -->
+</html>

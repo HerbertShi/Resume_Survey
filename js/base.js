@@ -27,3 +27,18 @@ function imagePreview(sourceId, targetId) {
     };
     reader.readAsDataURL(document.getElementById(sourceId).files[0]);
 }
+
+var requestUrl = {
+    survey : "api/mysurvey"//问卷列表
+};
+
+var survey_status ={
+    "0":"未启用",
+    "1":"已启用"
+}
+
+var examination_type ={
+    "0":"趣味问卷",
+    "1":"试用问卷",
+    "2":"商务问卷"
+}

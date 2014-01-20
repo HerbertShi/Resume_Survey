@@ -37,8 +37,19 @@
     </script>
 </head>
 <body>
-    <input id="start-test-button" type="button" value="开始" />
-    <div id="test">
-    </div>
+    <form name="form1" method="post" enctype="multipart/form-data" action="api/upload">
+        <div>
+            <label for="caption">Image Caption</label>
+            <input name="caption" type="text" />    
+        </div>
+        <div>
+            <label for="image1">Image File</label>
+            <input name="image1" type="file" />    
+        </div>
+        <div>
+            <input type="submit" value="Submit" />    
+        </div>
+    </form>
+    <img src="api/Files/BodyPart_dcf5ad72-4215-43d2-b72e-8b371793e802" />
 </body>
 </html>
