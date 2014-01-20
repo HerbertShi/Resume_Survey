@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>问卷制作</title>
+    <link rel="stylesheet" type="text/css" href="js/lib/jquery-ui/jquery-ui.css" />
+    <!--<link rel="stylesheet" type="text/css" href="css/createSurvey/builtSurvey.css" />-->
+    <link rel="stylesheet" href="js/lib/jwysiwyg/jquery.wysiwyg.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="style/branch.css" />
+    <link rel="stylesheet" type="text/css" href="style/base.css" />
+    <script type="text/javascript" src="js/lib/spine.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="js/lib/jwysiwyg/jquery.wysiwyg.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/controller/baseinfo.js"></script>
+    <script type="text/javascript" src="js/controller/question.preview.js"></script>
+    <script type="text/javascript" src="js/controller/survey.create.js"></script>
+    <script type="text/javascript" src="js/model/survey.js"></script>
+    <script type="text/javascript" src="js/model/question.js"></script>
+    <script type="text/javascript" src="js/model/option.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/lib/province_city_district/json-array-of-province.js"></script>
+
+    <!-- use ext plugin -->
+    <link rel="stylesheet" type="text/css" href="js/lib/query/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="js/lib/query/process.css" />
+    <link rel="stylesheet" type="text/css" href="js/lib/query/widget.css" />
+    <script type="text/javascript" src="js/lib/query/ext.js"></script>
+    <script type="text/javascript" src="js/lib/query/all-min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="head">
+            <div class="logo">
+                <img src="img/logo_survey.png" /></div>
+            <div class="page_tab">
+                页面标签</div>
+            <!-- page title -->
+            <div class="welcome">
+                欢迎您，Evan | <a href="#">退出</a>
+            </div>
+        </div>
+        <div class="main">
+            <div class="aside">
+                <ul>
+                    <li class="active"><a href="co_crm.html">客户管理</a></li>
+                    <li><a href="co_question_management.html">问卷管理</a></li>
+                    <li><a href="co_template.html">问卷模版管理</a></li>
+                </ul>
+            </div>
+            <div class="container">
+                <!-- InstanceBeginEditable name="container" -->
+                <div class="pag_content">
+                    <div id="tabs">
+                        <ul>
+                            <li class="start"><a href="#add-base-info">
+                                <label>
+                                    1</label>编辑问卷信息</a></li>
+                            <li><a href="#build-survey-questions">
+                                <label>
+                                    2</label>问卷制作</a></li>
+                        </ul>
+                        <div id="add-base-info" class="branch_question_new">
+                        </div>
+                        <div id="build-survey-questions" class="branch_question_manufacture">
+                        </div>
+                        <!-- These are templates for controller -->
+                        <script type="text/x-jquery-tmpl" id="base-info-template">
+                        <div class="split_8">
+                            <div>
+                                <label>问卷名</label>
+                                <input type="text" id="question-name" class="survey-model" />
+                            </div>
+                            <div>
+                                <label>问卷宣传图</label>
+                                <input type="file" id="upload-public-pic" class="survey-model" />
+                            </div>
+                            <div>
+                                <label>封面</label>
+                                <input type="file" class="survey-model" id="upload-face-page" />
+                            </div>
+                            <div>
+                                <label>logo</label>
+                                <input type="file" class="survey-model" id="upload-logo" />
+                            </div>
+                            <div>
+                                <label>封底</label>
+                                <input type="file" class="survey-model" id="upload-bottom-page" />
+                            </div>
+                            <div>
+                                <label>问卷类型</label>
+                                <select id="examination-type" class="survey-model">
+                                    <option value="0" selected="">趣味问卷</option>
+                                    <option value="1">试用问卷</option>
+                                    <option value="2">商务问卷</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>问卷说明</label>
+                                <textarea id="examination-detail" class="survey-model size_70per"></textarea>
+                            </div>
+                            <div>
+                                <label>备注</label>
+                                <textarea id="remark" class="survey-model size_70per"></textarea>
+                            </div>
+                            <div  class="servey-edit-next">
+                                <label> </label>
+                                <input type="button" value="下一步" class="next_step btn_blue"/>
+                                <input type="button" class="reset btn_blue" value="重置">
+                            </div>
+                        </div>
+                        <div class="split_2">
+                            <div>宣传图预览</div>
+                            <img id="imgPre-public-pic" />
+                            <div>封面预览</div>
+                            <img id="imgPre-face-page" />
+                            <div>logo预览</div>
+                            <img id="imgPre-logo" />
+                            <div>封底预览</div>
+                            <img id="imgPre-bottom-page" />
+                        </div>
+                        <div class="clear"></div>
+                        </script>
+                        <script type="text/x-jquery-tmpl" id="survey-create-template">
+                            <div class="split_2 border_blue" id="questionType">
+                              <div class="page_subhead top">逻辑题名</div>
+                              <div class="page_subhead_cont aside">
+                                <ul  id="question-tool-bar">
+                                  <li><img src="img/manufactor_aside_radio.png"  id="single-select"/><span>单选题</span></li>
+                                  <li><img src="img/manufactor_aside_checkbox.png"  id="multi-select"/><span>多选题</span></li>
+                                  <li><img src="img/manufactor_aside_determinant.png"  id="matrix"/><span>矩阵题</span></li>
+                                  <li><img src="img/manufactor_aside_freedom.png"  id="open"/><span>开放题</span></li>
+                                  <li><img src="img/manufactor_aside_region.png"  id="area"/><span>地区题</span></li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="split_8"  id="question-editor">
+                              <div class=" border_blue grap_15">
+                                <div class="form_28 survey_name">
+                                    <div>
+                                      <label>问卷名称</label>
+                                      <span></span>
+                                    </div>
+                                </div>
+                                <!--     creator main  -->
+                                <div id="creator-area" class="form_28">
+                                  <span class="default">将左侧的题型拖到此处添加问卷题目。</span>
+                                </div>
+                                <!-- builded list main -->
+                                <div class="btn_opera">
+                                  <input type="button" id="question-save" value="保存" class="btn_blue"/>
+                                  <input type="button" id="question-cancel" value="取消"  class="btn_blue"/>
+                                </div>
+                              </div>
+                              <div id="survey-preview"></div>
+                              <!-- / border_blue end -->
+                              <div class="servey-edit-next">
+                                <input type="button" value="上一步" onclick="$('#tabs').tabs('option', 'active', 0 );" class="btn_blue"/>
+                              </div>
+                            </div>
+                        </script>
+                        <script type="text/x-jquery-tmpl" id="survey-preview-template">
+                            <div id="survey-preview-list" class="question">
+                            </div>
+                            <div class="btn_opera">
+                                <input type="button" value="提交" id="submit-survey" class="btn_blue"/>
+                            </div>
+                        </script>
+                        <!-- This is for radio question options template -->
+                        <script type="text/x-jquery-tmpl" id="question-preview-template">
+                            <dl>
+                                <dt>
+                                    <span>${questionIndex}</span>.${questionDescription}
+                                </dt>
+                                <dd class="option-list">
+
+                                </dd>
+                                <dd class="clear"></dd>
+                                <dd class="questionary_list_opera">
+                                    <a class="remove-question" href="#">删除</a>
+                                    <a class="edit-question" href="#">修改</a>
+                                </dd>
+                            </dl>
+                        </script>
+                        <!-- This is for question crearor text -->
+                        <script type="text/x-jquery-tmpl" id="question-text-creator-template">
+                          <div>
+                            <label class="float">问题</label>
+                            <div class="textarea_widget">
+                              <textarea id="question-text"></textarea>
+                              <input type="checkbox" id="necessary" />
+                              <span>必须回答</span>
+                            </div>
+                          </div>
+                          <div class="clear"></div>
+                        </script>
+                        <!-- This is for radio question options template -->
+                        <script type="text/x-jquery-tmpl" id="radio-option-creator-template">
+                        <div id="option-creators">
+                            <label class="float">选项</label>
+                            <div>
+                                <div class="option-creator">
+                                    <span class="option-tag">${optionTag}</span>
+                                    <select class="type-select" >
+                                        <option value="0">选项</option>
+                                        <option value="1" ${select}>开放</option>
+                                    </select>
+                                   {{if type == "0"}}
+                                    <input class="option-content" type="text" value="${optionValue}" />
+                                    {{else}}
+                                    <span>选项</span>
+                                    <input class="option-content" type="text" value="${optionValue}" />
+                                    <span>单位</span>
+                                    <input class="option-unit" type="text" value="${optionUnit}"/>
+                                    {{/if}}
+                                    <input type="file" id="img-upload-${optionTag}" class="upload">
+                                    <img  id="img-pre-${optionTag}" class="option-img-preview" width="21" height="19" />
+                                    {{if type == "1"}}
+                                    <input class="option-valid" type="checkbox" ${optionValid} />
+                                    <span>验证</span>
+                                    {{/if}}
+                                    <div class="btn_opera">
+                                        <a href="#" class="delete remove-option-tag"></a>
+                                    </div>
+                                </div>
+                                <div class="btn_opera">
+                                    <a href="#" class="add" id="add-option-tag"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div>                                
+                            <label>显示方式</label>
+                            <select id="arrangement">
+                                <option value="0">横向显示</option>
+                                <option value="1" ${show}>纵向显示</option>
+                            </select>
+                        </div>
+                        <div class="clear"></div>
+                        </script>
+                        <!-- This is for check question options template -->
+                        <script type="text/x-jquery-tmpl" id="check-option-creator-template">
+                            <div id="max_min_optionNum">
+                                <label>最多可选：</label>
+                                <select id="max-select-num">
+                                    <option value="1">1</option>
+                                </select>
+                                <label>最少可选：</label>
+                                <select id="min-select-num">
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </script>
+                        <!-- This is for matrix question template -->
+                        <script type="text/x-jquery-tmpl" id="matrix-option-creator-template">
+                        <div>
+                            <div id="type">类型：<input type="radio" name="matrix_type"/>单选<input type="radio" name="matrix_type"/>多选</div>
+                            <div>表侧选项
+                                <div id="matrix_SideOpt">
+                                </div>
+                                <div class="btn_opera"><a href="#" class="add" id="matrix_addSideOpt"></a></div>
+                            </div>
+                            <div>表头选项
+                                <div id="matrix_HeadOpt">
+                                </div>
+                                <div class="btn_opera"><a href="#" class="add" id="matrix_addHeadOpt"></a></div>
+                            </div>
+                            <div id="matrix_max_min_optionNum">
+                                <label>最多可选：</label>
+                                <select id="matrix_max-select-num">
+                                    <option value="1">1</option>
+                                </select>
+                                <label>最少可选：</label>
+                                <select id="matrix_min-select-num">
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        </script>
+                        <!-- This is for matrix question option template -->
+                        <script type="text/x-jquery-tmpl" id="matrix-option-template">
+                            <div class="option-creator">
+                                <span class="option-tag">${optionIndex}</span>:
+                                <input type="text" ${value}>
+                                <input type="checkbox" ${necessary}>必须回答
+                                <div class="btn_opera">
+                                    <a href="#" class="delete remove-option-tag"></a>
+                                </div>
+                            </div>
+                        </script>
+                        <!-- This is for open question options template -->
+                        <script type="text/x-jquery-tmpl" id="open-option-creator-template">
+                            <div>
+                                <label id="validation">
+                                    <input type="checkbox" id="valid" />
+                                    验证
+                                </label>
+                                <select>
+                                    <option>邮箱</option>
+                                    <option>手机</option>
+                                    <option>数字</option>
+                                    <option>日期</option>
+                                </select>
+                            </div>
+                            <div  id="input-type">
+                                <label>输入类型</label>
+                                <select>
+                                    <option value="0">输入框</option>
+                                    <option value="1" ${select} >文本域</option>
+                                </select>
+                            </div>
+                        </script>
+                        <!-- This is for area question options template -->
+                        <script type="text/x-jquery-tmpl" id="area-option-creator-template">
+                            <div>
+                                <label class="float">选项</label>
+                                <div id = "areaType">
+                                    {{if areaType == "province" }}
+                                        <input id="province" type="checkbox" checked="true" />
+                                        <span>省</span>
+                                        <input id="city" type="checkbox" />
+                                        <span>市</span>
+                                        <input id="district" type="checkbox" disabled="true" />
+                                        <span>区</span>
+                                    {{/if}}
+                                    {{if areaType == "city" }}
+                                        <input id="province" type="checkbox" checked="true" />
+                                        <span>省</span>
+                                        <input id="city" type="checkbox" checked="true" />
+                                        <span>市</span>
+                                        <input id="district" type="checkbox" />
+                                        <span>区</span>
+                                    {{/if}}
+                                    {{if areaType == "district" }}
+                                        <input id="province" type="checkbox" checked="true" />
+                                        <span>省</span>
+                                        <input id="city" type="checkbox" checked="true" />
+                                        <span>市</span>
+                                        <input id="district" type="checkbox"checked="true" />
+                                        <span>区</span>
+                                    {{/if}}
+                                    {{if areaType == null }}
+                                        <input id="province" type="checkbox" />
+                                        <span>省</span>
+                                        <input id="city" type="checkbox" disabled="true" />
+                                        <span>市</span>
+                                        <input id="district" type="checkbox" disabled="true" />
+                                        <span>区</span>
+                                    {{/if}}
+                                    <p>
+                                        说明：选择可选的地区级别。只有选择了上一级地区后，方可选择下一级地区项。例如：选择省后，市可选，但不可选择区。
+                                    </p>
+                                </div>
+                            </div>
+                        </script>
+                        <script type="text/x-jquery-tmpl" id="area-province-preview-template">
+                            <select class='province'><option value='0'>请选择</option></select>省
+                        </script>
+                        <script type="text/x-jquery-tmpl" id="area-city-preview-template">
+                            <select class='city'><option value='0'>请选择</option></select>市
+                        </script>
+                        <script type="text/x-jquery-tmpl" id="area-district-preview-template">
+                            <select class='district'><option value='0'>请选择</option></select>区
+                        </script>
+                        <!-- This is for the radio and checkbox option template -->
+                        <script type="text/x-jquery-tmpl" id="radio-option-template">
+                            <div class=${arrangement}>
+                                {{if type == "textarea"}}
+                                    <label><input type=${questionType} name=${name}/>${index}.${content} </label>
+                                    <textarea></textarea>
+                                    ${unit}
+                                {{else}}
+                                    <label><input type=${type} name=${name}/> ${index}.${content}</label>
+                                {{/if}}
+                            </div>
+                        </script>
+
+                        <!--题目选项 -->
+                        <script type="text/x-jquery-tmpl" id="question-list-template">
+                            <option value=${index}>${index}.${question}</option>
+                        </script>
+                    </div>
+                </div>
+                <!-- InstanceEndEditable -->
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <!-- footer start-->
+        <div class="foot">
+            我能调研 版权所有 沪ICP备10027199号 Copyright © 2010-2011 www.icansurvey.cc. All Riggnhts Reserved.
+        </div>
+    </div>
+    <!--                                 // <div>
+                        //     <label></label>
+                        //     <input type="button" class="btn_blue" value="下一步" />
+                        //     <input type="button" class="btn_blue" value="重置" />
+                        // </div> -->
+</body>
+<!-- InstanceEnd -->
+</html>
