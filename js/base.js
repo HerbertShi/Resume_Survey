@@ -16,7 +16,7 @@ Array.prototype.move = function (old_index, new_index) {
 };
 
 function imagePreview(sourceId, targetId) {
-    if (typeof FileReader === 'undefined') {
+    /*if (typeof FileReader === 'undefined') {
         alert('Your browser does not support FileReader...');
         return;
     }
@@ -25,11 +25,31 @@ function imagePreview(sourceId, targetId) {
         var img = document.getElementById(targetId);
         img.src = this.result;
     };
-    reader.readAsDataURL(document.getElementById(sourceId).files[0]);
+    reader.readAsDataURL(document.getElementById(sourceId).files[0]);*/
+    var files = $("#" + sourceId).get(0).files;
+    if (files.length > 0) {
+        var data = new FormData();
+        for (i = 0; i < files.length; i++) {
+            data.append("file" + i, files[i]);
+        }
+        $.ajax({
+            type: "POST",
+            url: requestUrl.upload,
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function(results) {
+                if (results) {
+                    $("#" + targetId).attr("src", requestUrl.upload + "/" + results);
+                }
+            }
+        });
+    }
 }
 
 var requestUrl = {
-    survey : "api/mysurvey"//问卷列表
+    survey: "api/mysurvey", //问卷列表
+    upload: "api/upload" //上传
 };
 
 var survey_status ={

@@ -107,7 +107,6 @@
                             <div  class="servey-edit-next">
                                 <label> </label>
                                 <input type="button" value="下一步" class="next_step btn_blue"/>
-                                <input type="button" class="reset btn_blue" value="重置">
                             </div>
                         </div>
                         <div class="split_2">
@@ -129,9 +128,9 @@
                                 <ul  id="question-tool-bar">
                                   <li><img src="img/manufactor_aside_radio.png"  id="single-select"/><span>单选题</span></li>
                                   <li><img src="img/manufactor_aside_checkbox.png"  id="multi-select"/><span>多选题</span></li>
-                                  <li><img src="img/manufactor_aside_determinant.png"  id="matrix"/><span>矩阵题</span></li>
-                                  <li><img src="img/manufactor_aside_freedom.png"  id="open"/><span>开放题</span></li>
-                                  <li><img src="img/manufactor_aside_region.png"  id="area"/><span>地区题</span></li>
+                                  <li style="display:none;"><img src="img/manufactor_aside_determinant.png"  id="matrix"/><span>矩阵题</span></li>
+                                  <li style="display:none;"><img src="img/manufactor_aside_freedom.png"  id="open"/><span>开放题</span></li>
+                                  <li style="display:none;"><img src="img/manufactor_aside_region.png"  id="area"/><span>地区题</span></li>
                                 </ul>
                               </div>
                             </div>
@@ -189,8 +188,6 @@
                             <label class="float">问题</label>
                             <div class="textarea_widget">
                               <textarea id="question-text"></textarea>
-                              <input type="checkbox" id="necessary" />
-                              <span>必须回答</span>
                             </div>
                           </div>
                           <div class="clear"></div>
@@ -206,20 +203,9 @@
                                         <option value="0">选项</option>
                                         <option value="1" ${select}>开放</option>
                                     </select>
-                                   {{if type == "0"}}
                                     <input class="option-content" type="text" value="${optionValue}" />
-                                    {{else}}
-                                    <span>选项</span>
-                                    <input class="option-content" type="text" value="${optionValue}" />
-                                    <span>单位</span>
-                                    <input class="option-unit" type="text" value="${optionUnit}"/>
-                                    {{/if}}
                                     <input type="file" id="img-upload-${optionTag}" class="upload">
                                     <img  id="img-pre-${optionTag}" class="option-img-preview" width="21" height="19" />
-                                    {{if type == "1"}}
-                                    <input class="option-valid" type="checkbox" ${optionValid} />
-                                    <span>验证</span>
-                                    {{/if}}
                                     <div class="btn_opera">
                                         <a href="#" class="delete remove-option-tag"></a>
                                     </div>

@@ -91,8 +91,9 @@ var SurveyCreate = Spine.Controller.sub({
     },
 
     initCheckCreator: function () {
-        var optionCreatorTemp = $("#check-option-creator-template").tmpl().before(this.initRadioCreator());
-        return optionCreatorTemp;
+        //var optionCreatorTemp = $("#check-option-creator-template").tmpl().before(this.initRadioCreator());
+        //return optionCreatorTemp;
+        return this.initRadioCreator();
     },
 
     initMatrixCreator: function () {
@@ -201,7 +202,7 @@ var SurveyCreate = Spine.Controller.sub({
     saveQuestion: function () {
         if (this.question) {
             this.question.description = $('#question-textIFrame').contents().find('body').html();
-            this.question.necessary = $('input[type=checkbox]').filter('#necessary')[0].checked;
+            //this.question.necessary = $('input[type=checkbox]').filter('#necessary')[0].checked;
             var options = [];
             switch (this.question.type) {
                 case "single-select":
@@ -209,23 +210,24 @@ var SurveyCreate = Spine.Controller.sub({
                     break;
                 case "multi-select":
                     this.getOptions(options);
-                    this.question.maxSelection = $('#max-select-num').find("option:selected").text();
-                    this.question.minSelection = $('#min-select-num').find("option:selected").text();
+                    // this.question.maxSelection = $('#max-select-num').find("option:selected").text();
+                    // this.question.minSelection = $('#min-select-num').find("option:selected").text();
                     break;
                 case "matrix":
-                    this.getMatrixOptions();
-                    this.question.matrixType = $("input[name='matrix_type']")[0].checked ? 0 : 1; //0 单选 1 多选
-                    if(this.question.matrixType == 1){ //if multiSelect
-                        this.question.maxSelection = $("#max-select-num").val();
-                        this.question.minSelection = $("#min-select-num").val();
-                    }
+                    // this.getMatrixOptions();
+                    // this.question.matrixType = $("input[name='matrix_type']")[0].checked ? 0 : 1; //0 单选 1 多选
+                    // if(this.question.matrixType == 1){ //if multiSelect
+                    //     this.question.maxSelection = $("#max-select-num").val();
+                    //     this.question.minSelection = $("#min-select-num").val();
+                    // }
                     break;
                 case "open":
-                    this.question.valid_type = $('input[type=checkbox]').filter('#valid')[0].checked ? $('#validation').find("option:selected").text() : '';
-                    this.question.input_type = $('#input-type').find("option:selected").val();
+                    //this.question.valid_type = $('input[type=checkbox]').filter('#valid')[0].checked ? $('#validation').find("option:selected").text() : '';
+                    //this.question.input_type = $('#input-type').find("option:selected").val();
                     break;
                 case "area":
-                    this.question.area = this.getArea();
+                    //this.question.area = this.getArea();
+                    break;
             }
             surveyInstance.updateQuestion(this.question);
             $(this.creatorArea).empty().height(200);

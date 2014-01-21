@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿1<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -25,6 +25,21 @@
             }
         }
 
+        function changeStatus(_id) {
+            $.ajax({
+                url: requestUrl.survey + "/" + _id,
+                type: "PUT",
+                success: function(response, option) {
+                    if (response == 0) {
+                        alert("修改成功！");
+                        listSurvey();
+                    } else {
+                        alert("修改失败！");
+                    }
+                }
+            });
+        }
+
         function listSurvey() {
             $.getJSON(requestUrl.survey, function(data) {
                 $("#surveyList tbody").empty();
@@ -36,9 +51,9 @@
                     $tr.append("<td>" + element.question_name + "</td>");
                     $tr.append("<td>" + element.createTime + "</td>");
                     $tr.append("<td>" + element.updateTime + "</td>");
-                    $tr.append("<td>" + survey_status[element.survey_status] + "</td>");
+                    $tr.append("<td><a onclick='changeStatus(" + element.ID + ")'>" + survey_status[element.survey_status] + "</a></td>");
                     $tr.append("<td>" + examination_type[element.examination_type] + "</td>");
-                    $tr.append("<td><a onclick='deleteSurvey(" + element.ID + ")'>删除</a></td>");
+                    $tr.append("<td><a href='index.html?id=" + element.ID + "'>编辑</a> <a onclick='deleteSurvey(" + element.ID + ")'>删除</a></td>");
                     $tr.appendTo($("#surveyList tbody"));
                 });
             });
@@ -70,12 +85,9 @@
             <div class="container">
                 <!-- InstanceBeginEditable name="container" -->
                     <div class="pag_head">
-
-                        <span>
-                            <!-- #EndLibraryItem -->                    
-                            <!-- #BeginLibraryItem "/Library/btn_new.lbi" -->                    
-                            <input type="button" value="新增" class="btn_blue">                    
-                            <!-- #EndLibraryItem --> </span>
+                        <span>                
+                            <input type="button" value="新增" class="btn_blue" onclick="location.href='index.html'">
+                        </span>
                     </div>
                     <div class="pag_content">
                         <table id="surveyList" class="tbl">
@@ -102,11 +114,6 @@
             我能调研 版权所有 沪ICP备10027199号 Copyright © 2010-2011 www.icansurvey.cc. All Riggnhts Reserved.
         </div>
     </div>
-    <!--                                 // <div>
-                        //     <label></label>
-                        //     <input type="button" class="btn_blue" value="下一步" />
-                        //     <input type="button" class="btn_blue" value="重置" />
-                        // </div> -->
 </body>
 <!-- InstanceEnd -->
 </html>

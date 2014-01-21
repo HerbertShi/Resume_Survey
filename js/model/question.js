@@ -4,5 +4,11 @@ Question.configure('Question', 'type', 'description', 'necessary', 'options', 'a
 Question.include({
     aaa: function () {
         alert(this.type);
-    }
+    },
+	create: function(_type, _description,_options, _arrangement) {
+		this.type = _type;
+		this.description = _description;
+		this.options = _options;
+		this.arrangement = _arrangement;
+	}
 });
