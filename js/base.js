@@ -49,7 +49,8 @@ function imagePreview(sourceId, targetId) {
 
 var requestUrl = {
     survey: "api/mysurvey", //问卷列表
-    upload: "api/upload" //上传
+    upload: "api/upload", //上传
+    user: "api/user" //用户
 };
 
 var survey_status ={
@@ -61,4 +62,9 @@ var examination_type ={
     "0":"趣味问卷",
     "1":"试用问卷",
     "2":"商务问卷"
+}
+
+var gender ={
+    "m":"男",
+    "f":"女"
 }
