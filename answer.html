@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>答题页面</title>
+    <link rel="stylesheet" type="text/css" href="js/lib/jquery-ui/jquery-ui.css" />
+    <link href="css/personal.css" type="text/css" rel="stylesheet" rev="stylesheet" />
+
+    <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/json.js"></script>
+    <script>
+        var userId = $.cookie("userId");
+        if (!userId || userId < 0) {
+            alert("您的用户信息有误，请重新填写用户信息！");
+            location.href = "home.html";
+        }
+
+        $(function(){
+            $(".page_next:not(#save-answer)").click(function(){
+                $(".paper_next_container").hide();
+                $(this).parents(".paper_next_container").next().show();
+            });
+
+            $("#save-answer").click(function() {
+                if (confirm("确认提交？")) {
+                    var answerScript = "";
+                    var answerList = "";
+                    $("#page_cont").children("dl").each(function(index, element) {
+                        var selectValue = $(element).find("input[type=radio]:checked").val();
+                        if (selectValue) {
+                            answerScript += "$('#page_cont').children('dl:eq(" + index + ")').find('input[type=radio][value=" + selectValue + "]').attr('checked',true);"
+                            answerList += selectValue + ",";
+                        } else {
+                            answerList += ",";
+                        }
+                    });
+
+                    $.post(requestUrl.test, {
+                        "": [answerList,answerScript]
+                    }, function(results) {
+                        if (results == 0) {
+                            alert("提交成功！");
+                            $(".paper_next_container").hide();
+                            $("#save-answer").parents(".paper_next_container").next().show();
+                        } else {
+                            alert("提交失败，请重新答题！");
+                            location.reload();
+                        }
+                    });
+                }
+            });
+
+            $.getJSON(requestUrl.test, function(data) {
+                if (data.ID > 0) {
+                    if (data.public_pic) {
+                        $(".paper_next_container").eq(0).find("img").attr("src", requestUrl.upload + "/" + data.public_pic);
+                    }
+                    if (data.face_page) {
+                        $(".question .answer_start ").css("background", "url(" + requestUrl.upload + "/" + data.face_page + ")");
+                    }
+                    if (data.logo) {
+                        $(".question .title img ").attr("src", requestUrl.upload + "/" + data.logo);
+                    }
+                    if (data.bottom_page) {
+                        $(".paper_next_container").eq(3).find("img").attr("src", requestUrl.upload + "/" + data.bottom_page);
+                    }
+                    $(".paper_next_container h1").html(data.question_name);
+                    $(".paper_next_container").eq(0).show();
+                    $("#page_cont").append(data.question_html);
+                } else {
+                    alert("获取试题信息有误！");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <!--头部 begin-->
+
+    <!--头部 end-->
+    <div id="main" class="question">
+        <!-- paper front cover start -->
+        <div class="paper_next_container" style="display:none;">
+            <div class="personal_main">
+                <span>
+                    <img src="img/ad/001.jpg" width="1000" height="400" />
+                </span>
+                <hr />
+                <div class="login_bt02">
+                    <a href="#" title="立即参加" class="page_next">立即参加</a>
+                </div>
+            </div>
+        </div>
+        <!-- / paper front cover end -->
+        <!--  paper begin start -->
+        <div class="paper_next_container" style="display:none;">
+            <div class="banner">&nbsp;</div>
+            <div class="container">
+                <div class="title">
+                    <img width="46" src="img/icon/question_icon.png" />
+                    <h1>测试你重色轻友的程度</h1>
+                </div>
+                <div class="answer_start">
+                    <div class="fr">
+                        <p class="height_1">
+                            我们都认识这样的一个朋友：他或她在遇上心仪的异性后就从朋友圈的聚会里完全失踪。此前每天粘如连体婴儿的女伴，或是此前夜夜一同举杯痛饮的兄弟，有有了异性立刻丧失了人性。你完全可以把这人的手机号码从通讯录中删除，反正即使打通也只会得到"抱歉，我们已经订好了去海"或者"真没办法，我得陪女朋友逛街"。这种状况会一直持续到这段恋情终结，此人才会垂头丧气的在朋友圈中"复活"。提到这种会因坠入爱河而周期性神隐的朋友时，我们一般用四个字来概括：重色轻友。&nbsp;&nbsp;&nbsp;接下来，我们就开始测试你是不是那位周期性神隐的朋友吧……
+                        </p>
+                        <div class="btn_group">
+                            <a href="#" class="btn_orange_2 page_next">开始答题</a>
+                        </div>
+                        <p class="text_center">您的意见非常重要，请认真独立回答！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / paper begin end -->
+        <!--  paper step & finished start -->
+        <div class="paper_next_container" style="display:none;">
+            <div class="banner">&nbsp;</div>
+            <div class="container">
+                <div class="title">
+                    <img width="46" src="img/icon/question_icon.png" />
+                    <h1>测试你重色轻友的程度</h1>
+                </div>
+                <div id="page_cont">
+                    <!--           <dl>
+                    <dt>1.单选题</dt>
+                    <dd>
+                        <input id="" type="checkbox" value="checkbox" >
+                        选项
+                        <input id="" type="checkbox" value="checkbox" >
+                        选项
+                        <input id="" type="checkbox" value="checkbox" >
+                        选项
+                        <input type="text" />
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>2.多选题</dt>
+                    <dd>
+                        <input name="double" type="radio" value="checkbox" checked />
+                        选项
+                        <input name="double" type="radio" value="checkbox" />
+                        选项
+                        <input name="double" type="radio" value="checkbox" />
+                        选项
+                        <input type="text" />
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>3.矩阵题</dt>
+                    <dd>
+                        <table >
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>很满意</th>
+                                <th>满意</th>
+                                <th>基本满意</th>
+                                <th>不满意</th>
+                            </tr>
+                            <tr>
+                                <td>三星</td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" checked />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>联想</td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" checked />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>戴尔</td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" checked />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                            </tr>
+                        </table>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>4.开放题</dt>
+                    <dd>
+                        <textarea></textarea>
+                    </dd>
+                </dl>
+                -->
+            </div>
+            <div class="btn_group">
+                <a href="#" id="save-answer" class="btn_orange_2 page_next">提&nbsp;交</a>
+            </div>
+        </div>
+    </div>
+    <!-- / paper step & finished end -->
+    <!-- / paper back cover start -->
+    <div class="paper_next_container" style="display:none;">
+        <div class="personal_main">
+            <span>
+                <img src="img/ad/001.jpg" width="1000" height="400" />
+            </span>
+            <hr />
+            <div class="login_bt02">
+                <a href="#" title="立即参加">关&nbsp;闭</a>
+            </div>
+        </div>
+    </div>
+    <!-- / paper back cover end -->
+</div>
+
+</body>
+<!-- InstanceEnd -->
+</html>

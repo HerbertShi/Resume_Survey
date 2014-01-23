@@ -74,18 +74,30 @@ var SurveyCreate = Spine.Controller.sub({
         var optionCreatorTemp;
         if (this.question.options != null) {
             var arrangement = this.question.arrangement;
-            $(this.question.options).each(function (index, element) {
+            $(this.question.options).each(function(index, element) {
+                var optionObj = {
+                    "optionTag": element.index,
+                    "type": element.type,
+                    "optionValue": element.content,
+                    "show": (arrangement === "1" ? "selected" : ''),
+                    "select": (element.type === "0" ? "" : "selected"),
+                    "optionScore": (element.score || 0),
+                    "pic": (element.pic || "")
+                };
                 if (index === 0) {
-                    optionCreatorTemp = $("#radio-option-creator-template").tmpl(element.type === "0" ? { "optionTag": "A", "type": "0", "optionValue": element.content, "show": arrangement === "1" ? "selected" : ''} : { "optionTag": "A", "type": "1", "optionValue": element.content, "optionUnit": element.unit, "optionValid": element.is_valid ? "checked" : '', "select": "selected", "show": arrangement === "1" ? "selected" : '' });
-                }
-                else {
+                    optionCreatorTemp = $("#radio-option-creator-template").tmpl(optionObj);
+                } else {
+
                     $(optionCreatorTemp).find("#add-option-tag")
-                    .parent().before($("#radio-option-creator-template").tmpl(element.type === "0" ? { "optionTag": element.index, "type": "0", "optionValue": element.content, "show": arrangement === "1" ? "selected" : ''} : { "optionTag": element.index, "type": "1", "optionValue": element.content, "optionUnit": element.unit, "optionValid": element.is_valid ? "checked" : '', "select": "selected", "show": arrangement === "1" ? "selected" : '' }).find(".option-creator"));
+                        .parent().before($("#radio-option-creator-template").tmpl(optionObj).find(".option-creator"));
                 }
             });
-        }
-        else {
-            optionCreatorTemp = $("#radio-option-creator-template").tmpl({ "optionTag": "A", "type": "0" });
+        } else {
+            optionCreatorTemp = $("#radio-option-creator-template").tmpl({
+                "optionTag": "A",
+                "type": "0",
+                "optionScore": "0"
+            });
         }
         return optionCreatorTemp;
     },
@@ -179,7 +191,7 @@ var SurveyCreate = Spine.Controller.sub({
 
     optionCreatorTemplate: function (indexTag, type) {
         type = typeof type !== 'undefined' ? type : "0";
-        return $("#radio-option-creator-template").tmpl({ "optionTag": indexTag, "type": type }).find(".option-creator");
+        return $("#radio-option-creator-template").tmpl({ "optionTag": indexTag, "type": type ,"optionScore":"0" }).find(".option-creator");
     },
 
     removeOption: function (e) {
@@ -229,23 +241,49 @@ var SurveyCreate = Spine.Controller.sub({
                     //this.question.area = this.getArea();
                     break;
             }
+
+            var flag = 0;
+            $(this.question.options).each(function(){
+                if(parseInt(this.score) >= 0){
+                    this.score = parseInt(this.score);
+                }else{
+                    alert("选项分数必须为整数！");
+                    flag =1 ;
+                    return false;
+                }
+            });
+
+            if(flag == 1){
+                return;
+            }
+
             surveyInstance.updateQuestion(this.question);
             $(this.creatorArea).empty().height(200);
             this.question = null;
             surveyInstance.activeQustIndex = null;
         } else {
-            alert("No question has been created!");
+            alert("没有需要保存的题目!");
         }
     },
 
     getOptions: function (options) {
-        $('.option-creator').each(function () {
+        $('.option-creator').each(function() {
             optionIndex = $(this).find('.option-tag').text();
             optionType = $(this).find("option:selected").val();
             optionContent = $(this).find('.option-content').val();
             optionUnit = $(this).find('.option-unit').val() || '';
             optionValid = $(this).find('.option-valid')[0] ? $(this).find('.option-valid')[0].checked : '';
-            option = new Option({ index: optionIndex, type: optionType, content: optionContent, unit: optionUnit, is_valid: optionValid });
+            optionPic = $(this).find('.option-img-preview').attr("src");
+            optionScore = $(this).find('.option-score').val();
+            option = new Option({
+                index: optionIndex,
+                type: optionType,
+                content: optionContent,
+                unit: optionUnit,
+                is_valid: optionValid,
+                pic: optionPic,
+                score:optionScore
+            });
             options.push(option);
         });
         this.question.options = options;

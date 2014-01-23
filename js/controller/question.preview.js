@@ -41,8 +41,8 @@ var QuestionPreview = Spine.Controller.sub({
     },
 
     initRadioCheckPreview: function (question, questionTag) {
-        var optionsValue = [];
-        var questionOptions = "";
+        // var optionsValue = [];
+        // var questionOptions = "";
         $(question.options).each(function (index, element) {
             var radioValue = {};
             radioValue.name = questionTag + 1;
@@ -53,6 +53,7 @@ var QuestionPreview = Spine.Controller.sub({
             radioValue.type = [question.type == "single-select" ? "radio" : "checkbox", "textarea"][typeValue]
             radioValue.questionType = [question.type == "single-select" ? "radio" : "checkbox", "textarea"][0]
             radioValue.arrangement = question.arrangement === "0" ? "option_horizontal" :"";
+            radioValue.pic = element.pic || "";
             $("#radio-option-template").tmpl(radioValue).appendTo(".option-list:last");
         });
     },

@@ -86,6 +86,7 @@
                             if (results > 0) {
                                 $.cookie("userId", results);
                                 alert("提交成功，确认后进入答题！");
+                                location.href = "answer.html"
                             } else {
                                 alert("提交失败！");
                             }

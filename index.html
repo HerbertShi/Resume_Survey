@@ -127,7 +127,7 @@
                               <div class="page_subhead_cont aside">
                                 <ul  id="question-tool-bar">
                                   <li><img src="img/manufactor_aside_radio.png"  id="single-select"/><span>单选题</span></li>
-                                  <li><img src="img/manufactor_aside_checkbox.png"  id="multi-select"/><span>多选题</span></li>
+                                  <li style="display:none;"><img src="img/manufactor_aside_checkbox.png"  id="multi-select"/><span>多选题</span></li>
                                   <li style="display:none;"><img src="img/manufactor_aside_determinant.png"  id="matrix"/><span>矩阵题</span></li>
                                   <li style="display:none;"><img src="img/manufactor_aside_freedom.png"  id="open"/><span>开放题</span></li>
                                   <li style="display:none;"><img src="img/manufactor_aside_region.png"  id="area"/><span>地区题</span></li>
@@ -205,7 +205,9 @@
                                     </select>
                                     <input class="option-content" type="text" value="${optionValue}" />
                                     <input type="file" id="img-upload-${optionTag}" class="upload">
-                                    <img  id="img-pre-${optionTag}" class="option-img-preview" width="21" height="19" />
+                                    <img  id="img-pre-${optionTag}" src="${pic}" class="option-img-preview" width="21" height="19" />
+                                    <br/>
+                                    <span>得分： </span><input class="option-score" type="text" value="${optionScore}" />
                                     <div class="btn_opera">
                                         <a href="#" class="delete remove-option-tag"></a>
                                     </div>
@@ -352,11 +354,15 @@
                         <script type="text/x-jquery-tmpl" id="radio-option-template">
                             <div class=${arrangement}>
                                 {{if type == "textarea"}}
-                                    <label><input type=${questionType} name=${name}/>${index}.${content} </label>
+                                    <label><input type=${questionType} name=${name} value=${index} />${index}.${content} </label>
                                     <textarea></textarea>
                                     ${unit}
                                 {{else}}
-                                    <label><input type=${type} name=${name}/> ${index}.${content}</label>
+                                    <label><input type=${type} name=${name} value=${index} /> ${index}.${content}</label>
+                                {{/if}}
+
+                                {{if pic != ""}}
+                                    <img width="100" src=${pic} />
                                 {{/if}}
                             </div>
                         </script>

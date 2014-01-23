@@ -50,7 +50,8 @@ function imagePreview(sourceId, targetId) {
 var requestUrl = {
     survey: "api/mysurvey", //问卷列表
     upload: "api/upload", //上传
-    user: "api/user" //用户
+    user: "api/user", //用户
+    test:"api/test" //测试
 };
 
 var survey_status ={
