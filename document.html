@@ -1,65 +1,100 @@
-﻿1<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>问卷制作</title>
+    <title>档案管理</title>
     <link rel="stylesheet" type="text/css" href="style/branch.css" />
     <link rel="stylesheet" type="text/css" href="style/base.css" />
+    <link rel="stylesheet" type="text/css" href="style/pager.css" />
     <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/lib/province_city_district/json-array-of-province.js"></script>
     <script>
-        function deleteSurvey(_id) {
-            if (confirm("确认删除？")) {
-                $.ajax({
-                    url: requestUrl.survey + "/" + _id,
-                    type: "DELETE",
-                    success: function(response, option) {
-                        if (response == 0) {
-                            alert("删除成功！");
-                            listSurvey();
-                        } else {
-                            alert("删除失败！");
-                        }
-                    }
-                });
-            }
-        }
+        var _pageSize = 10;
+        var _startIndex = 0;
+        var _orderName = "";
+        var _orderType = "";
+        function listUser() {
+            $.getJSON(requestUrl.user, {
+                searchCondition: "",
+                pageSize: _pageSize,
+                startIndex: _startIndex,
+                orderName: _orderName,
+                orderType: _orderType
+            }, function(data) {
+                if (data) {
+                    $("#userList tbody").empty();
+                    $(".pagination").hide();
+                    $("#listCount").html(data.listCount);
+                    $("#pageSize").html(_pageSize);
 
-        function changeStatus(_id) {
-            $.ajax({
-                url: requestUrl.survey + "/" + _id,
-                type: "PUT",
-                success: function(response, option) {
-                    if (response == 0) {
-                        alert("修改成功！");
-                        listSurvey();
-                    } else {
-                        alert("修改失败！");
+                    var currentPage = parseInt((_startIndex + 1 )/ _pageSize + 1, 10);
+                    var pageCount = parseInt((data.listCount - 1) / _pageSize + 1, 10);
+                    var pageHtml = "";
+                    if (currentPage > 1) {
+                        pageHtml += '<a href="javascript:void(0);" class="pre" pageno="' + (currentPage - 1) + '">&lt;</a>';
                     }
+                    if (currentPage - 2 > 0) {
+                        pageHtml += '<a href="javascript:void(0);" pageno="' + (currentPage - 2) + '">' + (currentPage - 2) + '</a>';
+                    }
+                    if(currentPage - 1 > 0){
+                        pageHtml += '<a href="javascript:void(0);" pageno="' + (currentPage - 1) + '">' + (currentPage - 1) + '</a>';
+                    }
+                    pageHtml += '<a href="javascript:void(0);" class="active">' + currentPage + '</a>';
+                    if(currentPage + 1 <= pageCount){
+                        pageHtml += '<a href="javascript:void(0);" pageno="' + (currentPage + 1) + '">' + (currentPage + 1) + '</a>';
+                    }
+                    if(currentPage + 2 <= pageCount){
+                        pageHtml += '<a href="javascript:void(0);" pageno="' + (currentPage + 2) + '">' + (currentPage + 2) + '</a>';
+                    }
+                    if(currentPage + 1 <= pageCount){
+                        pageHtml += '<a href="javascript:void(0);" class="next" pageno="' + (currentPage + 1) + '">&gt;</a>';
+                    }
+                    $(".opt").html(pageHtml);
+                    $(".pagination").show();
+
+                    $(data.list).each(function(index, element) {
+                        _startIndex++;
+                        var $tr = $("<tr></tr>");
+                        if (index % 2 == 1) {
+                            $tr.addClass("color");
+                        }
+                        $tr.append("<td>" + _startIndex + "</td>");
+                        $tr.append("<td>" + element.name + "</td>");
+                        $tr.append("<td>" + gender[element.gender] + "</td>");
+                        $tr.append("<td>" + element.birthday + "</td>");
+                        $tr.append("<td>" + codeToArea("province",element.homeLocation.split(",")[0]) + " " + codeToArea("city",element.homeLocation.split(",")[1]) + " " + codeToArea("district",element.homeLocation.split(",")[2]) + "</td>");
+                        $tr.append("<td>" + codeToArea("province",element.currentLocation.split(",")[0]) + " " + codeToArea("city",element.currentLocation.split(",")[1]) + " " + codeToArea("district",element.currentLocation.split(",")[2]) + "</td>");
+                        $tr.append("<td>" + (element.score || "未测试") + "</td>");
+                        $tr.append("<td><a href='review.html?id=" + element.id + "'>查看答题详情</a> <a href='" + requestUrl.user + "/" + element.id + "' target='_blank'>下载简历</a></td>");
+                        $tr.appendTo($("#userList tbody"));
+                    });
                 }
             });
         }
 
-        function listSurvey() {
-            $.getJSON(requestUrl.survey, function(data) {
-                $("#surveyList tbody").empty();
-                $(data).each(function(index, element) {
-                    var $tr = $("<tr></tr>");
-                    if (index % 2 == 1) {
-                        $tr.addClass("color");
-                    }
-                    $tr.append("<td>" + element.question_name + "</td>");
-                    $tr.append("<td>" + element.createTime + "</td>");
-                    $tr.append("<td>" + element.updateTime + "</td>");
-                    $tr.append("<td><a onclick='changeStatus(" + element.ID + ")'>" + survey_status[element.survey_status] + "</a></td>");
-                    $tr.append("<td>" + examination_type[element.examination_type] + "</td>");
-                    $tr.append("<td><a href='index.html?id=" + element.ID + "'>编辑</a> <a onclick='deleteSurvey(" + element.ID + ")'>删除</a></td>");
-                    $tr.appendTo($("#surveyList tbody"));
-                });
-            });
-        }
         $(function() {
-            listSurvey();
+            listUser();
+            $(".pagination .opt a").live("click",function(){
+                if($(this).attr("pageno")){
+                    _startIndex = parseInt(($(this).attr("pageno") - 1) * _pageSize);
+                    listUser();
+                }
+            });
+
+            $("#userList th[ordername]").bind("click", function() {
+                _orderName = $(this).attr("ordername");
+                if ($(this).attr("ordertype") == "desc") {
+                    $(this).attr("ordertype", "asc");
+                    $(this).children("span").html("    ↑");
+                } else {
+                    $(this).attr("ordertype", "desc");
+                    $(this).children("span").html("    ↓");
+                }
+                _orderType = $(this).attr("ordertype");
+                _startIndex = 0;
+                listUser();
+            });
         });
     </script>
 </head>
@@ -69,7 +104,7 @@
             <div class="logo">
                 <img src="img/logo_survey.png" /></div>
             <div class="page_tab">
-                问卷管理</div>
+                档案管理</div>
             <!-- page title -->
             <div class="welcome">
                 欢迎您，Evan | <a href="#">退出</a>
@@ -78,32 +113,50 @@
         <div class="main">
             <div class="aside">
                 <ul>
-                    <li class="active"><a href="management.html">问卷管理</a></li>
-                    <li><a href="document.html">档案管理</a></li>
+                    <li><a href="management.html">问卷管理</a></li>
+                    <li class="active"><a href="document.html">档案管理</a></li>
                 </ul>
             </div>
             <div class="container">
-                <!-- InstanceBeginEditable name="container" -->
-                    <div class="pag_head">
-                        <span>                
-                            <input type="button" value="新增" class="btn_blue" onclick="location.href='index.html'">
-                        </span>
+                <!-- InstanceBeginEditable name="container" -->            
+                <div class="pag_head">
+                    <span>
+                        <!-- <input type="button" value="新增" class="btn_blue" onclick="location.href='index.html'">--></span>
+                </div>
+                <div class="pag_content">
+                    <table id="userList" class="tbl">
+                        <thead>
+                            <th>序号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>出生日期</th>
+                            <th>户籍所在地</th>
+                            <th>现居住地</th>
+                            <th ordername="score">笔试得分<span></span></th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="pagination">
+                        <div class="info">
+                            共
+                            <span id="listCount"></span>
+                            条记录，每页
+                            <span id="pageSize"></span>
+                            条
+                        </div>
+                        <div class="opt">
+                            <a href="#" class="pre">&lt;</a>
+                            <a href="#" class="active">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                            <a href="#">5</a>
+                            <a href="#">6</a>
+                            <a href="#" class="next">&gt;</a>
+                        </div>
                     </div>
-                    <div class="pag_content">
-                        <table id="surveyList" class="tbl">
-                            <thead>
-                                <th>问卷名称</th>
-                                <th>创建时间</th>
-                                <th>修改时间</th>
-                                <th>状态</th>
-                                <th>问卷类型</th>
-                                <th>操作</th>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
                 <!-- InstanceEndEditable -->
             </div>
             <div class="clear">
