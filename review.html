@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>答题页面</title>
+    <link rel="stylesheet" type="text/css" href="js/lib/jquery-ui/jquery-ui.css" />
+    <link href="css/personal.css" type="text/css" rel="stylesheet" rev="stylesheet" />
+
+    <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/json.js"></script>
+    <script>
+        $(function() {
+            $.getJSON(requestUrl.user, {
+                searchCondition: location.search.split("?")[1],
+                pageSize: 1,
+                startIndex: 0,
+                orderName: "",
+                orderType: ""
+            }, function(data) {
+                if (data.list[0].score) {
+                    $("#page_cont").append(data.list[0].survey_html);
+                    eval(data.list[0].answer_script);
+                    $(".paper_next_container").show();
+                } else {
+                    alert("没有答题结果！");
+                    location.href = "document.html";
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <!--头部 begin-->
+
+    <!--头部 end-->
+    <div id="main" class="question">
+        <div class="paper_next_container" style="display:none;">
+            <div class="banner">&nbsp;</div>
+            <div class="container">
+                <div class="title">
+                    <img width="46" src="img/icon/question_icon.png" />
+                    <h1></h1>
+                </div>
+                <div id="page_cont">
+                    <!--           <dl>
+                    <dt>1.单选题</dt>
+                    <dd>
+                        <input id="" type="checkbox" value="checkbox" >
+                        选项
+                        <input id="" type="checkbox" value="checkbox" >
+                        选项
+                        <input id="" type="checkbox" value="checkbox" >
+                        选项
+                        <input type="text" />
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>2.多选题</dt>
+                    <dd>
+                        <input name="double" type="radio" value="checkbox" checked />
+                        选项
+                        <input name="double" type="radio" value="checkbox" />
+                        选项
+                        <input name="double" type="radio" value="checkbox" />
+                        选项
+                        <input type="text" />
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>3.矩阵题</dt>
+                    <dd>
+                        <table >
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>很满意</th>
+                                <th>满意</th>
+                                <th>基本满意</th>
+                                <th>不满意</th>
+                            </tr>
+                            <tr>
+                                <td>三星</td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" checked />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>联想</td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" checked />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>戴尔</td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" checked />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                                <td>
+                                    <input id="" type="checkbox" value="checkbox" />
+                                </td>
+                            </tr>
+                        </table>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>4.开放题</dt>
+                    <dd>
+                        <textarea></textarea>
+                    </dd>
+                </dl>
+                -->
+            </div>
+            <div class="btn_group">
+                <a href="document.html" class="btn_orange_2">关&nbsp;闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<!-- InstanceEnd -->
+</html>

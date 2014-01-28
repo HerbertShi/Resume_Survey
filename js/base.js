@@ -47,6 +47,16 @@ function imagePreview(sourceId, targetId) {
     }
 }
 
+function codeToArea(areaType, areaCode) {
+    var result = "";
+    $(areaData[areaType]).each(function() {
+        if (this.code == areaCode) {
+            result = this.name;
+        }
+    });
+    return result;
+}
+
 var requestUrl = {
     survey: "api/mysurvey", //问卷列表
     upload: "api/upload", //上传

@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>提交简历</title>
     <link rel="stylesheet" type="text/css" href="js/lib/jquery-ui/jquery-ui.css" />
+    <link href="style/resume.css" type="text/css" rel="stylesheet" rev="stylesheet" />
     <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="js/lib/jquery.cookie.js"></script>
@@ -74,8 +75,8 @@
                     data.append("name", $("#name").val());
                     data.append("gender", $("input[type=radio]").val());
                     data.append("birthday", $("#birthday").val());
-                    data.append("homeLocation", $("#homeDistrict").val());
-                    data.append("currentLocation", $("#currentDistrict").val());
+                    data.append("homeLocation", $("#homeProvince").val() + "," + $("#homeCity").val() + "," + $("#homeDistrict").val());
+                    data.append("currentLocation", $("#currentProvince").val() + "," + $("#currentCity").val() + "," +$("#currentDistrict").val());
                     $.ajax({
                         type: "POST",
                         url: requestUrl.user,
@@ -98,55 +99,78 @@
     </script>
 </head>
 <body>
-    <div>
-        <div>姓名</div>
-        <div>
-            <input id="name" type="text" />    
-        </div>
-        <div>性别</div>
-        <div>
-            男
-            <input name="gender" type="radio" value="m" checked="checked" />    
-            女
-            <input name="gender" type="radio" value="f" />    
-        </div>
-        <div>出生日期</div>
-        <div>
-            <input id="birthday" type="text" />    
-        </div>
-        <div>户籍所在地</div>
-        <div>
-            <select id="homeProvince" class="province">
-                <option value="">---请选择---</option>
-            </select>
-            <select id="homeCity" class="city">
-                <option value="">---请选择---</option>
-            </select>
-            <select id="homeDistrict" class="district">
-                <option value="">---请选择---</option>
-            </select>
-        </div>
-        <div>现居住地</div>
-        <div>
-            <select id="currentProvince" class="province">
-                <option value="">---请选择---</option>
-            </select>
-            <select id="currentCity" class="city">
-                <option value="">---请选择---</option>
-            </select>
-            <select id="currentDistrict"class="district">
-                <option value="">---请选择---</option>
-            </select>
-        </div>
-        <div>简历上传 （word）</div>
-        <div>
-            <input id="resume" type="file" />    
-        </div>
-        <div></div>
-        <div>
-            <input id="submit" type="button" value="提交" />    
-        </div>
+<div class="wrapper">
+    <div class="header">简历提交</div>
+    <div class="main">
+        
+        <table>
+            <tr>
+                <td>姓名</td>
+                <td colspan="3">
+                    <input id="name" type="text" />
+                </td>
+
+
+            </tr>
+            <tr>
+                                             <td>出生日期</td>
+                <td>
+                    <input id="birthday" type="text" />
+                </td>   
+                                <td>性别</td>
+                <td>
+                    男
+                    <input name="gender" type="radio" value="m" checked="checked" />
+                    女
+                    <input name="gender" type="radio" value="f" />
+                </td>
+            </tr>
+            <tr>
+                <td>户籍所在地</td>
+                <td colspan="3">
+                    <select id="homeProvince" class="province">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="homeCity" class="city">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="homeDistrict" class="district">
+                        <option value="">---请选择---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>现居住地</td>
+                <td colspan="3">
+                    <select id="currentProvince" class="province">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="currentCity" class="city">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="currentDistrict"class="district">
+                        <option value="">---请选择---</option>
+                    </select>
+                </td>
+
+            </tr>
+            <tr>
+                <td>简历上传 （word）</td>
+                <td colspan="3">
+                    <input id="resume" type="file"/>
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input id="submit" type="button" value="提交" class="btn_blue"/>
+                </td>
+
+            </tr>
+        </table>
+
     </div>
+</div>
 </body>
 <!-- InstanceEnd -->
 </html>
